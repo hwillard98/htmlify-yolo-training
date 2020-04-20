@@ -4,7 +4,7 @@ import glob
 import random
 import shutil
 import os
-from PIL import Image
+from PIL import Image, ImageEnhance
 
 from os import path
 
@@ -74,6 +74,16 @@ for directory in [BASE, BASE_LABELS, TRAIN, DEV, TEST, TRAIN_LABELS, DEV_LABELS,
 
 # Get dataset
 dataset = glob.glob('dataset/*.jpg')
+
+
+#preprocessing
+for file in dataset:
+	print(file)
+	image = Image.open(file).convert('L')
+	enhancer = ImageEnhance.Contrast(image)
+	enhanced_im = enhancer.enhance(1.0)
+	enhanced_im.save(file)
+
 
 
 # Combines files into one list
