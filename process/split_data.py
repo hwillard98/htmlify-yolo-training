@@ -125,6 +125,9 @@ def create_set(text_file, num, IMAGES, LABELS):
 		data_file.write(os.path.join(IMAGES, filename) + '\n')
 	data_file.close()
 
+# seed set splitting
+random.seed(40)
+
 if num_test > 0:
 	create_set("test.txt", num_test, TEST, TEST_LABELS)
 create_set("dev.txt", num_dev, DEV, DEV_LABELS)
