@@ -4,7 +4,9 @@ import glob
 import random
 import shutil
 import os
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, ImageOps
+import numpy as np
+import cv2
 
 from os import path
 
@@ -45,12 +47,16 @@ with open(DATA_FILE, 'r') as f:
 	labeldict = json.load(f)
 
 # download dataset
+# cnt = 0
 for item in labeldict:
 	filename = 'dataset/' + item['ID'] + '.jpg'	
 	if not path.exists(filename):
 		img_data = requests.get(item['Labeled Data']).content
 		with open(filename, 'wb') as handler:
 			handler.write(img_data)
+	# cnt += 1
+	# if cnt > 5:
+	# 	break
 
 print("Dataset download complete")
 
@@ -80,10 +86,23 @@ dataset = glob.glob('dataset/*.jpg')
 for file in dataset:
 	print(file)
 	image = Image.open(file).convert('L')
-	enhancer = ImageEnhance.Contrast(image)
-	enhanced_im = enhancer.enhance(1.0)
-	enhanced_im.save(file)
+	# enhancer = ImageEnhance.Contrast(image)
+	# enhanced_im = enhancer.enhance(1.0)
+	# enhanced_im.save(file)
 
+	# image = ImageOps.equalize(image)
+	# image = ImageOps.autocontrast(image, cutoff=50)
+
+	img = np.asarray(image)
+
+	img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 10)
+
+	img = cv2.medianBlur(img,3)
+
+	# img = cv2.GaussianBlur(img, (5,5), 0)
+
+	image = Image.fromarray(np.uint8(img))
+	image.save(file)
 
 
 # Combines files into one list
