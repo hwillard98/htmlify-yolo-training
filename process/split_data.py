@@ -12,8 +12,17 @@ from os import path
 
 print("Starting data download")
 
+
+
 DATA_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'export-2020-04-16T16_57_05.518Z.json')
 DATASET = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'dataset')
+
+# clear dataset folder
+
+if os.path.exists(DATASET):
+	shutil.rmtree(DATASET, ignore_errors=False,
+							onerror=None)
+os.mkdir(DATASET)
 
 with open(DATA_FILE, 'r') as f:
 	labeldict = json.load(f)
@@ -56,7 +65,7 @@ for directory in [BASE, BASE_LABELS, TRAIN, DEV, TEST, TRAIN_LABELS, DEV_LABELS,
 # Get dataset
 dataset = glob.glob(os.path.join(DATASET, '*.jpg'))
 
-print("Preprocessing images")
+print("Preprocessing images (version 2)")
 
 #preprocessing
 for file in dataset:
