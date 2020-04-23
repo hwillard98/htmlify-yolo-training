@@ -14,12 +14,24 @@ Test on validation set:
 python3 test.py --cfg yolov3-spp.cfg --weights weights/epoch300_custom_from_ultra.pt --data data/custom.data
 
 Test on custom data: (put data in data/samples)
-python3 detect.py --weights weights/last_custom_from_scratch.pt --names data/custom.names --cfg cfg/yolov3-spp.cfg
+python3 detect.py --weights weights/last_custom_from_scratch.pt --names data/custom.names --cfg cfg/yolov3-spp.cfg --source data/images/validation
 
 
-300 epochs training data
+original data
 300 epochs completed in 2.131 hours.
-Epoch   gpu_mem      GIoU       obj       cls     total   targets  img_size
-   299/299     6.44G      1.47      1.04     0.241      2.75        12    512: 100% 23/23 [00:24<00:00,  1.06s/it]
-		Class    Images   Targets         P         R   mAP@0.5           F1: 100% 3/3 [00:01<00:00,  2.93it/s]
-        all        22       155     0.678     0.649     0.623     0.654
+Class    Images   Targets      P         R   	mAP@0.5   F1: 100% 3/3 [00:01<00:00,  2.93it/s]
+all        22       155     0.678     0.649     0.623     0.654
+
+
+original pre-processed data
+300 epochs completed in 1.323 hours.
+Class    Images   Targets     P         R   mAP@0.5   	  F1: 100% 2/2 [00:03<00:00,  1.93s/it]
+all        22       148     0.822     0.897     0.917     0.853
+
+
+method 2 pre-processed data
+Class    Images   Targets         P         R   mAP@0.5        F1: 100% 3/3 [00:01<00:00,  1.63it/s]
+all        22       175     0.805     0.876     0.884     0.836
+
+
+original pre-processed data fixed dataset

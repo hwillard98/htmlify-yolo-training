@@ -8,24 +8,10 @@ from PIL import Image, ImageEnhance
 
 from os import path
 
-print("Starting data download")
-
-DATA_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'export-2020-04-16T16_57_05.518Z.json')
+print("Creating directory structure")
+#DATA_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'export-2020-04-16T16_57_05.518Z.json')
+DATA_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'export-4-23.json')
 DATASET = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'dataset')
-
-with open(DATA_FILE, 'r') as f:
-	labeldict = json.load(f)
-
-
-# download dataset
-for item in labeldict:
-	filename = os.path.join(DATASET, item['ID'] + '.jpg')	
-	if not path.exists(filename):
-		img_data = requests.get(item['Labeled Data']).content
-		with open(filename, 'wb') as handler:
-			handler.write(img_data)
-
-print("Dataset download complete")
 
 data_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),"..")), "data")
 
@@ -42,10 +28,22 @@ TEST_LABELS = os.path.join(BASE_LABELS, "test")
 # and create file structure
 for directory in [BASE, BASE_LABELS, TRAIN, DEV, TEST, TRAIN_LABELS, DEV_LABELS, TEST_LABELS]:
 	if os.path.exists(directory):
-		shutil.rmtree(directory, ignore_errors=False,
-								onerror=None)
+		shutil.rmtree(directory, ignore_errors=False, onerror=None)
 	os.mkdir(directory)
 
+with open(DATA_FILE, 'r') as f:
+	labeldict = json.load(f)
+
+print("Starting data download")
+# download dataset
+for item in labeldict:
+	filename = os.path.join(DATASET, item['ID'] + '.jpg')	
+	if not path.exists(filename):
+		img_data = requests.get(item['Labeled Data']).content
+		with open(filename, 'wb') as handler:
+			handler.write(img_data)
+
+print("Dataset download complete")
 
 # Get dataset
 dataset = glob.glob(os.path.join(DATASET, '*.jpg'))
@@ -59,6 +57,7 @@ for file in dataset:
 	enhanced_im = enhancer.enhance(1.0)
 	enhanced_im.save(file)
 
+print("Finished preprocessing, splitting sets")
 
 # Combines files into one list
 size = len(dataset)

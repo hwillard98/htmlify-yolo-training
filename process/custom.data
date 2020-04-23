@@ -1,4 +1,0 @@
-classes=6
-train=data/train.txt
-valid=data/dev.txt
-names=data/custom.names
